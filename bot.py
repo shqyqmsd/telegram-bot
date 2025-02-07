@@ -7,7 +7,7 @@ TOKEN = "7783463727:AAHjbY9f92ISsmKEAZfVoJYMf-jdP0e1EB4"
 ADMIN_ID = 5460232465
 
 # Webhook URL
-WEBHOOK_URL = "https://your-domain.com/your-webhook-endpoint"  # جایگزین با URL صحیح
+WEBHOOK_URL = "https://telegram-bot.up.railway.app/your-webhook-endpoint"
 
 async def start(update: Update, context: CallbackContext):
     keyboard = [[KeyboardButton("📞 ارسال شماره تلفن", request_contact=True)]]
