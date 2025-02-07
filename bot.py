@@ -1,35 +1,50 @@
 from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext
-import os
+from telegram.ext import Application, CommandHandler, ContextTypes
+import logging
 
-TOKEN = "7783463727:AAHjbY9f92ISsmKEAZfVoJYMf-jdP0e1EB4"
 
-ADMIN_ID = 5460232465
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-# Webhook URL
-WEBHOOK_URL = "https://telegram-bot.up.railway.app/your-webhook-endpoint"
 
-async def start(update: Update, context: CallbackContext):
-    keyboard = [[KeyboardButton("📞 ارسال شماره تلفن", request_contact=True)]]
-    reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
-    await update.message.reply_text("لطفاً شماره تلفن خود را ارسال کنید:", reply_markup=reply_markup)
+ADMIN_ID = 5460232465  
 
-async def contact_handler(update: Update, context: CallbackContext):
-    user = update.message.from_user
-    phone_number = update.message.contact.phone_number
-    await context.bot.send_message(chat_id=ADMIN_ID, text=f"📞 شماره جدید دریافت شد:\n👤 {user.full_name}\n📱 {phone_number}")
-    await update.message.reply_text("✅ شماره شما با موفقیت ثبت شد. متشکرم!")
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    if user_id == ADMIN_ID:
+        await update.message.reply_text("سلام مدیر عزیز! من آماده‌ام که کمک کنم.")
+    else:
+        await update.message.reply_text("سلام! شما دسترسی به دستورات مدیریتی ندارید.")
+
+
+async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("دستورات ربات:\n/start - شروع کار با ربات\n/help - راهنمای ربات")
+
+
+async def admin_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    if user_id == ADMIN_ID:
+        await update.message.reply_text("این یک دستور مدیریتی است که فقط برای شما قابل دسترسی است.")
+    else:
+        await update.message.reply_text("شما دسترسی به این دستور ندارید.")
+
 
 def main():
+
+    TOKEN = "7783463727:AAHjbY9f92ISsmKEAZfVoJYMf-jdP0e1EB4"
+
+
     application = Application.builder().token(TOKEN).build()
 
-    # اضافه کردن هندلرها
+
     application.add_handler(CommandHandler("start", start))
-    application.add_handler(MessageHandler(filters.CONTACT, contact_handler))
+    application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("admin", admin_command))
 
-    # فعال‌سازی Webhook به جای Polling
-    application.bot.set_webhook(url=WEBHOOK_URL)
-    application.run_polling(drop_pending_updates=True)  # optional, if you want to drop updates before the bot starts
 
-if __name__ == "__main__":
+    application.run_polling()
+
+if __name__ == '__main__':
     main()
