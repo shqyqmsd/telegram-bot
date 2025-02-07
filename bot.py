@@ -1,11 +1,9 @@
 from telegram import Bot, Update, ReplyKeyboardMarkup, KeyboardButton
-from telegram.ext import CommandHandler, MessageHandler, filters, CallbackContext, Application
-import os
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext
 
-# توکن ربات را به صورت مستقیم وارد کنید
 TOKEN = "7783463727:AAHjbY9f92ISsmKEAZfVoJYMf-jdP0e1EB4"
 
-ADMIN_ID = 5460232465
+ADMIN_ID = 5460232465  # آی‌دی خود را اینجا بگذارید
 
 async def start(update: Update, context: CallbackContext):
     keyboard = [[KeyboardButton("📞 ارسال شماره تلفن", request_contact=True)]]
@@ -20,14 +18,14 @@ async def contact_handler(update: Update, context: CallbackContext):
     await update.message.reply_text("✅ شماره شما با موفقیت ثبت شد. متشکرم!")
 
 def main():
-    # از Application به جای Updater استفاده می‌کنیم
+    # ایجاد Application
     application = Application.builder().token(TOKEN).build()
 
-    # اضافه کردن هندلرها به dispatcher
+    # اضافه کردن هندلرها
     application.add_handler(CommandHandler("start", start))
     application.add_handler(MessageHandler(filters.CONTACT, contact_handler))  # اصلاح به filters
     
-    # شروع به دریافت پیام‌ها و پردازش آن‌ها
+    # شروع گرفتن آپدیت‌ها
     application.run_polling()
 
 if __name__ == "__main__":
