@@ -1,8 +1,7 @@
-from telegram import Bot, Update, ReplyKeyboardMarkup, KeyboardButton
+from telegram import Update, ReplyKeyboardMarkup, KeyboardButton
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext
 
-TOKEN = "7783463727:AAHjbY9f92ISsmKEAZfVoJYMf-jdP0e1EB4"
-
+TOKEN = "7783463727:AAHjbY9f92ISsmKEAZfVoJYMf-jdP0e1EB4"  # جایگزین کردن با توکن واقعی خود
 ADMIN_ID = 5460232465  # آی‌دی خود را اینجا بگذارید
 
 async def start(update: Update, context: CallbackContext):
