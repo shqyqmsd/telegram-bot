@@ -1,9 +1,9 @@
 from telegram import Bot, Update, ReplyKeyboardMarkup, KeyboardButton
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from telegram.ext import Updater, CommandHandler, MessageHandler, filters, CallbackContext
 import os
 
-TOKEN = os.getenv("TOKEN")  # دریافت توکن از محیط متغیرهای Render
-ADMIN_ID = 123456789  # آی‌دی خود را اینجا بگذارید
+TOKEN = "7783463727:AAHjbY9f92ISsmKEAZfVoJYMf-jdP0e1EB4"
+ADMIN_ID = 5460232465  
 
 def start(update: Update, context: CallbackContext):
     keyboard = [[KeyboardButton("📞 ارسال شماره تلفن", request_contact=True)]]
@@ -18,14 +18,15 @@ def contact_handler(update: Update, context: CallbackContext):
     update.message.reply_text("✅ شماره شما با موفقیت ثبت شد. متشکرم!")
 
 def main():
-    updater = Updater(TOKEN, use_context=True)
+    updater = Updater(TOKEN)
     dp = updater.dispatcher
     
     dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(MessageHandler(Filters.contact, contact_handler))
+    dp.add_handler(MessageHandler(filters.CONTACT, contact_handler))  # اصلاح به filters
     
     updater.start_polling()
     updater.idle()
 
 if __name__ == "__main__":
     main()
+
